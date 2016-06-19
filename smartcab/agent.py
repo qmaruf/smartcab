@@ -41,8 +41,8 @@ class LearningAgent(Agent):
         inputs = self.env.sense(self)
         deadline = self.env.get_deadline(self)
 
-        # TODO: Update state
-        self.state = (inputs['light'],inputs['oncoming'], self.next_waypoint)       
+        # TODO: Update state        
+        self.state = (inputs['light'],inputs['oncoming'], inputs['left'], self.next_waypoint)       
 
         if randint(0,10) < 3:
             action = self.actions[randint(0, 3)]
@@ -53,13 +53,13 @@ class LearningAgent(Agent):
 
         next_inputs = self.env.sense(self)
         next_next_waypoint = self.planner.next_waypoint()
-        next_state = (next_inputs['light'],next_inputs['oncoming'], next_next_waypoint)      
+        next_state = (next_inputs['light'],next_inputs['oncoming'], next_inputs['left'], next_next_waypoint)      
        
         _, best_profit = self.get_best_action(next_state)
         self.q_table[(self.state, action)] = (1-self.alpha)*self.q_table[(self.state, action)] + (self.alpha * (reward + self.gamma * best_profit))
 
        
-        # print "LearningAgent.update(): deadline = {}, inputs = {}, action = {}, reward = {}".format(deadline, inputs, action, reward)  # [debug]
+        print "LearningAgent.update(): deadline = {}, inputs = {}, action = {}, reward = {}".format(deadline, inputs, action, reward)  # [debug]
 
 
 def run():
